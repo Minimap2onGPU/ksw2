@@ -6,7 +6,7 @@ CPPFLAGS=	-g -Wall -Wextra -O2 #-DHAVE_KALLOC
 INCLUDES=	-I.
 OBJS=		ksw2_gg.o ksw2_gg2.o ksw2_gg2_sse.o ksw2_extz.o ksw2_extz2_sse.o \
 			ksw2_extd.o ksw2_extd2_sse.o ksw2_extf2_sse.o ksw2_exts2_sse.o \
-			ksw2_extd2.o ksw2_extd2_cpp.o
+			ksw2_extd2.o ksw2_extd2_cpp.o ksw2_extd2_no_sse.o
 PROG=		ksw2-test
 LIBS=		-lz
 coverage = n
@@ -63,6 +63,9 @@ report:
 
 ksw2-test:cli.o kalloc.o $(OBJS)
 		$(CXX) $(CFLAGS) $^ -o $@ $(LIBS_MORE) $(LIBS)
+
+test_vector: test_vector.o
+		$(CXX) $(CFLAGS) -Wno-incompatible-pointer-types $^ -o $@.x $(LIBS_MORE) $(LIBS)
 		
 clean:
 		rm -fr gmon.out *.o a.out $(PROG) $(PROG_EXTRA) *~ *.a *.dSYM session*
@@ -78,6 +81,7 @@ kalloc.o: kalloc.h
 ksw2_extd.o: ksw2.h
 ksw2_extd2_sse.o: ksw2.h
 ksw2_extf2_sse.o: ksw2.h
+ksw2_extd2_no_sse.o: ksw2.h vector.h
 ksw2_extz.o: ksw2.h
 ksw2_extz2_sse.o: ksw2.h
 ksw2_gg.o: ksw2.h
