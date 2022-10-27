@@ -78,6 +78,7 @@ static void global_aln(const char *algo, void *km, const char *qseq_, const char
 	else if (strcmp(algo, "extz2_sse") == 0)   ksw_extz2_sse(km, qlen, (uint8_t*)qseq, tlen, (uint8_t*)tseq, m, mat, q, e, w, zdrop, 0, flag, ez);
 	else if (strcmp(algo, "extd") == 0)        ksw_extd(km, qlen, (uint8_t*)qseq, tlen, (uint8_t*)tseq, m, mat, q, e, q2, e2, w, zdrop, flag, ez);
 	else if (strcmp(algo, "extd2_sse") == 0)   ksw_extd2_sse(km, qlen, (uint8_t*)qseq, tlen, (uint8_t*)tseq, m, mat, q, e, q2, e2, w, zdrop, end_bonus, flag, ez);
+	else if (strcmp(algo, "extd2_no_sse") == 0)   ksw_extd2_no_sse(km, qlen, (uint8_t*)qseq, tlen, (uint8_t*)tseq, m, mat, q, e, q2, e2, w, zdrop, end_bonus, flag, ez);
 	// NOTE: add our c version of alignment
     else if (strcmp(algo, "extd2") == 0)
         ksw_extd2_c(km, qlen, (uint8_t *)qseq, tlen, (uint8_t *)tseq, m, mat, q,
@@ -181,7 +182,7 @@ int main(int argc, char *argv[])
 	ksw_extz_t ez;
 	gzFile fp[2];
 
-	while ((c = getopt(argc, argv, "t:w:R:e:rscxvgz:A:B:O:E:Ka")) >= 0) {
+	while ((c = getopt(argc, argv, "t:w:R:e:rscxvgqz:A:B:O:E:Ka")) >= 0) {
 		if (c == 't') algo = optarg;
 		else if (c == 'w') w = atoi(optarg);
 		else if (c == 'R') rep = atoi(optarg);
@@ -193,6 +194,7 @@ int main(int argc, char *argv[])
 		else if (c == 'x') flag |= KSW_EZ_EXTZ_ONLY;
 		else if (c == 'v') flag |= KSW_EZ_REV_CIGAR;
 		else if (c == 'g') flag |= KSW_EZ_APPROX_MAX | KSW_EZ_APPROX_DROP;
+		else if (c == 'q') flag |= KSW_EZ_EQX;
 		else if (c == 'K') no_kalloc = 1;
 		else if (c == 'A') a = atoi(optarg);
 		else if (c == 'B') b = atoi(optarg);
